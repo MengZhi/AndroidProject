@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferenceS">
+    <SwitchPreference
+        android:key="about"
+        android:title="first"
+        android:summary="this is first"
+        />
+
+    <SwitchPreference
+        android:key="labelTaxonomy"
+        android:title="second"
+        android:summary="this is second"
+        />
+    <SwitchPreference
+        android:key="labelTaxonomy"
+        android:title="second"
+        android:summary="this is second"
+        />
+    <SwitchPreference
+        android:key="labelTaxonomy"
+        android:title="second"
+        android:summary="this is second"
+        />
+    <SwitchPreference
+        android:key="labelTaxonomy"
+        android:title="second"
+        android:summary="this is second"
+        />
+</PreferenceScreen>
