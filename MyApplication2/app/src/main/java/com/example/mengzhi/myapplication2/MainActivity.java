@@ -37,6 +37,7 @@ public class MainActivity extends FragmentActivity{
      * and next wizard steps.
      */
     private ViewPager mPager;
+    
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
