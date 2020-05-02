@@ -1,4 +1,4 @@
-package com.example.mengzhi.kotlinapplication
+package com.example.mengzhi.myapplication2
 
 import android.content.Context
 import android.preference.Preference

@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity{
      * and next wizard steps.
      */
     private ViewPager mPager;
-    
+
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -47,12 +47,12 @@ public class MainActivity extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_pager_layout);
+        setContentView(R.layout.activity_main2);
 
         // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(pagerAdapter);
+//        mPager = (ViewPager) findViewById(R.id.pager);
+//        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+//        mPager.setAdapter(pagerAdapter);
     }
 
     @Override
