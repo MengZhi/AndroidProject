@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--<com.example.mengzhi.kotlinapplication.ViewPagerPreference-->
-    <!--android:layout="@layout/view_pager">-->
-
-    <!--</com.example.mengzhi.kotlinapplication.ViewPagerPreference>-->
+    <com.example.mengzhi.myapplication2.ViewPagerPreference
+        android:layout="@layout/view_pager_layout">
+    </com.example.mengzhi.myapplication2.ViewPagerPreference>
 
     <SwitchPreference
             android:id="@+id/first_switch"
@@ -41,28 +39,8 @@
             android:title="hitouc_resource_update"
             android:summary="hitouc_resource_update"/>
 
-    <SwitchPreference
-            android:id="@+id/third7_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
-
-    <SwitchPreference
-            android:id="@+id/third8_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
-
-    <SwitchPreference
-            android:id="@+id/third9_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
-
     <com.example.mengzhi.myapplication2.HiTouchVersionPreference
     android:layout="@layout/hitouch_version">
     </com.example.mengzhi.myapplication2.HiTouchVersionPreference>
-
-
 </PreferenceScreen>
 

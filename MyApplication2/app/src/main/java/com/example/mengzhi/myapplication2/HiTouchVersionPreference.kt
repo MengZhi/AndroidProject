@@ -5,7 +5,6 @@ import android.preference.Preference
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
-import com.example.mengzhi.myapplication2.R
 
 class HiTouchVersionPreference : Preference {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(

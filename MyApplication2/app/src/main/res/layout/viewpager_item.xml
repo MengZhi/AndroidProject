@@ -6,17 +6,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
         android:layout_gravity="center">
         <ImageView
             android:id="@+id/item_iv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
             android:layout_alignParentTop="true" />
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_below="@+id/item_iv"
             android:background="@color/colorPrimary" />
 
     </RelativeLayout>

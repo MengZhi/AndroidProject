@@ -6,7 +6,7 @@
                                              android:layout_height="match_parent"
                                              tools:context=".MainActivity">
 
-    <fragment android:name="com.example.mengzhi.myapplication2.MyFragment"
+    <fragment android:name="com.example.mengzhi.myapplication2.MyPreferenceFragment"
               android:id="@+id/my_fragment"
               android:layout_width="match_parent"
               android:layout_height="match_parent"/>
