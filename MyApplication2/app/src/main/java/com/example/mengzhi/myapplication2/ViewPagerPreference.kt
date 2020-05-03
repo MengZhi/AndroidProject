@@ -20,14 +20,11 @@ class ViewPagerPreference:Preference{
     private lateinit var mContext:Context
 
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+    constructor(context: Context, attrs: AttributeSet) : super(
             context,
             attrs,
-            defStyleAttr
-    )
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        ViewPagerPreference(context, attrs, 0)
+            0
+    ) {
         widgetLayoutResource = R.layout.view_pager_layout
         mContext = context
         Log.d("zhimeng", "widgetLayoutResource setted")

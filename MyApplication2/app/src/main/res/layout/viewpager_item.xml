@@ -8,18 +8,20 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
         android:layout_gravity="center">
-        <ImageView
-            android:id="@+id/item_iv"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentTop="true" />
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_below="@+id/item_iv"
+            android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/item_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/textView" />
+
 
     </RelativeLayout>
 
