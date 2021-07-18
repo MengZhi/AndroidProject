@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.example.mengzhi.myapplication2.MySwitchPreference
+        android:id="@+id/third6_switch"
+        android:key="hitouc_resource_update"
+        android:title="hitouc_resource_update"
+        android:summary="hitouc_resource_update"/>
+
+    <Preference
+        android:id="@+id/first_switch"
+        android:key="hitouch_switch"
+        android:title="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        android:summary="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+    <Preference
+        android:id="@+id/first_switch1"
+        android:key="hitouch_switch"
+        android:title="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        android:summary="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+    <Preference
+        android:id="@+id/first_switch5"
+        android:key="hitouch_switch"
+        android:title="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        android:summary="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+    <Preference
+        android:id="@+id/first_switch3"
+        android:key="hitouch_switch"
+        android:title="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        android:summary="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+    <Preference
+        android:id="@+id/first_switch4"
+        android:key="hitouch_switch"
+        android:title="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        android:summary="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+
+    <com.example.mengzhi.myapplication2.HiTouchVersionPreference
+        android:id="@+id/first_switch2"
+        android:key="hitouch_switch"
+        android:layout="@layout/hitouch_version"/>
+
+
+</PreferenceScreen>
+

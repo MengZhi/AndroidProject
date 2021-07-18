@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.example.mengzhi.myapplication2.ViewPagerPreference
-        android:layout="@layout/view_pager_layout">
-    </com.example.mengzhi.myapplication2.ViewPagerPreference>
+    <!--<com.example.mengzhi.myapplication2.ViewPagerPreference-->
+        <!--android:layout="@layout/view_pager_layout">-->
+    <!--</com.example.mengzhi.myapplication2.ViewPagerPreference>-->
 
     <SwitchPreference
             android:id="@+id/first_switch"
             android:key="hitouch_switch"
-            android:title="HiTouch Switch"
-            android:summary="HiTouch Switch"/>
+            android:title="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            android:summary="HiTouch SwitchXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
 
-    <SwitchPreference
-            android:id="@+id/second_switch"
-            android:key="hitouc_improvement"
-            android:title="hitouc_improvement"
-            android:summary="hitouc_improvement"/>
+    <!--<SwitchPreference-->
+            <!--android:id="@+id/second_switch"-->
+            <!--android:key="hitouc_improvement"-->
+            <!--android:title="hitouc_improvement"-->
+            <!--android:summary="hitouc_improvement"/>-->
 
-    <SwitchPreference
-            android:id="@+id/third_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
-    <SwitchPreference
-            android:id="@+id/third4_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
+    <!--<SwitchPreference-->
+            <!--android:id="@+id/third_switch"-->
+            <!--android:key="hitouc_resource_update"-->
+            <!--android:title="hitouc_resource_update"-->
+            <!--android:summary="hitouc_resource_update"/>-->
+    <!--<SwitchPreference-->
+            <!--android:id="@+id/third4_switch"-->
+            <!--android:key="hitouc_resource_update"-->
+            <!--android:title="hitouc_resource_update"-->
+            <!--android:summary="hitouc_resource_update"/>-->
 
+    <!--<SwitchPreference-->
+            <!--android:id="@+id/third5_switch"-->
+            <!--android:key="hitouc_resource_update"-->
+            <!--android:title="hitouc_resource_update"-->
+            <!--android:summary="hitouc_resource_update"/>-->
     <SwitchPreference
-            android:id="@+id/third5_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
+        android:id="@+id/third7_switch"
+        android:key="hitouc_resource_update"
+        android:title="hitouc_resource_update"
+        android:summary="hitouc_resource_update"/>
+    <com.example.mengzhi.myapplication2.MySwitchPreference
+        android:id="@+id/third8_switch"
+        android:key="hitouc_resource_update"
+        android:title="hitouc_resource_update"
+        android:summary="hitouc_resource_update"/>
 
-    <SwitchPreference
-            android:id="@+id/third6_switch"
-            android:key="hitouc_resource_update"
-            android:title="hitouc_resource_update"
-            android:summary="hitouc_resource_update"/>
-
-    <com.example.mengzhi.myapplication2.HiTouchVersionPreference
-    android:layout="@layout/hitouch_version">
-    </com.example.mengzhi.myapplication2.HiTouchVersionPreference>
+    <!--<com.example.mengzhi.myapplication2.HiTouchVersionPreference-->
+    <!--android:layout="@layout/hitouch_version">-->
+    <!--</com.example.mengzhi.myapplication2.HiTouchVersionPreference>-->
 </PreferenceScreen>
 
