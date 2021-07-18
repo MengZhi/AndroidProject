@@ -8,16 +8,12 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.preference.PreferenceActivity;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
+import com.example.mengzhi.myapplication2.EnvUtil;
 
 public class MainActivity extends Activity {
 
@@ -37,8 +33,6 @@ public class MainActivity extends Activity {
         view.startAnimation(animScaleSmall);
         view.startAnimation(animScaleLarge);
 
-
-
         view.setBackgroundResource(R.drawable.trans_color);
         AnimationDrawable animationDrawable = (AnimationDrawable) view.getBackground();
         animationDrawable.setOneShot(false);
@@ -53,5 +47,7 @@ public class MainActivity extends Activity {
 //        animatorSet2.play(animExit).after(5000L).after(animEnter);
 //        animatorSet2.setTarget(view);
 //        animatorSet2.start();
+
+        Log.d("zhimeng", "BuildConfig.DEBUG: " + BuildConfig.debug);
     }
 }

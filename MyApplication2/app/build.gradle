@@ -2,21 +2,26 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+def androidId = rootProject.ext.androidId
+
 android {
-    compileSdkVersion 28
+    compileSdkVersion androidId.compileSdkVersion
     defaultConfig {
-        applicationId "com.example.mengzhi.myapplication2"
-        minSdkVersion 26
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId androidId.applicationId
+        minSdkVersion androidId.minSdkVersion
+        targetSdkVersion androidId.targetSdkVersion
+        versionCode androidId.versionCode
+        versionName androidId.versionName
+        testInstrumentationRunner androidId.testInstrumentationRunner
     }
     buildTypes {
+        debug {
+            buildConfigField("String", "debug", "EnvUtil.ProductUrl")
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "debug", "EnvUtil.debug")
         }
     }
 }
