@@ -1,21 +1,14 @@
 package com.example.mengzhi.myapplication2
 
-import android.app.Fragment
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceActivity
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet
-import android.util.Log
-import android.view.View
+import android.view.KeyEvent
+import android.widget.Button
 import android.widget.ListView
-import com.example.mengzhi.myapplication2.R.id.fab
-import com.example.mengzhi.myapplication2.R.id.toolbar
+import android.widget.TextView
 
-import kotlinx.android.synthetic.main.activity_second.*
 
 class SecondActivity : PreferenceActivity() {
 
@@ -29,8 +22,40 @@ class SecondActivity : PreferenceActivity() {
 //        first.measure(0, 0)
 //        Log.d("zhimeng", "first height: " + first.measuredHeight)
         var sharedPreferences = getSharedPreferences("shared", Context.MODE_PRIVATE)
+        initButton()
     }
 
+    private fun initButton() {
+        val button = findViewById<Button>(R.id.second_button)
+        button.setOnClickListener {
+            val intent = Intent()
+            intent.putExtra("result", "clicked second button")
+            setResult(3, intent)
 
+            finish()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent()
+        intent.putExtra("result", "clicked back button")
+        setResult(3, intent)
+
+        finish()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            val intent = Intent()
+            intent.putExtra("result", "clicked back button")
+            setResult(3, intent)
+
+            finish()
+            true
+        } else {
+            super.onKeyDown(keyCode, event);
+        }
+    }
 
 }

@@ -12,14 +12,18 @@
         android:layout_height="wrap_content">
 
     </com.example.mengzhi.myapplication2.MyListView>
+
     <TextView
+        android:id="@+id/second_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="this si testing"
-        android:gravity="center"
-        android:layout_alignParentBottom="true">
-
-    </TextView>
-
-
+        android:text="this is testing"
+        android:layout_alignParentTop="true"
+        android:gravity="center"/>
+    <Button
+        android:id="@+id/second_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/second_text_view"
+        android:text="ButtonInMain" />
 </RelativeLayout>

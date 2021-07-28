@@ -2,10 +2,9 @@
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:duration="2000"
-    android:propertyName="translationX"
-    android:valueFrom="-500dp"
-    android:valueTo="0dp"
+    android:duration="300"
+    android:propertyName="ScaleX"
+    android:valueFrom="0.9"
+    android:valueTo="1.0"
     android:valueType="floatType">
-
 </objectAnimator>
