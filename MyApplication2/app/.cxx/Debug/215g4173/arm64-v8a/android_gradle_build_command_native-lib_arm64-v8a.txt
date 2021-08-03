@@ -1,0 +1,7 @@
+Executable : /Users/mengzhi/Library/Android/sdk/cmake/3.18.1/bin/ninja
+arguments : 
+-C
+/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/.cxx/Debug/215g4173/arm64-v8a
+native-lib
+jvmArgs : 
+

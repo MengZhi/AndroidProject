@@ -7,10 +7,10 @@ ext {
     ]
 
     androidId = [
-            compileSdkVersion        : 28,
+            compileSdkVersion        : 30,
             applicationId            : "com.example.mengzhi.myapplication2",
-            minSdkVersion            : 26,
-            targetSdkVersion         : 28,
+            minSdkVersion            : 30,
+            targetSdkVersion         : 29,
             versionCode              : 1,
             versionName              : "1.0",
             testInstrumentationRunner: "android.support.test.runner.AndroidJUnitRunner"

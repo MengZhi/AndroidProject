@@ -3,20 +3,12 @@ package com.example.mengzhi.myapplication2;
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import com.example.mengzhi.myapplication2.R.id.groups
+import android.widget.ListView
 
 
-
-
-
-
-public class MyListView : ListView{
+public class MyListView : ListView {
     var index = -1;
 
     constructor (context: Context):super(context) {

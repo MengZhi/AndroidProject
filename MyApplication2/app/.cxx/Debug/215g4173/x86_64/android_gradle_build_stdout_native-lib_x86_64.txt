@@ -1,0 +1,10 @@
+ninja: Entering directory `/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/.cxx/Debug/215g4173/x86_64'
+[1/2] Building CXX object CMakeFiles/native-lib.dir/native-lib.cpp.o
+/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/src/main/cpp/native-lib.cpp:36:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/src/main/cpp/native-lib.cpp:43:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+2 warnings generated.
+[2/2] Linking CXX shared library /Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/build/intermediates/cxx/Debug/215g4173/obj/x86_64/libnative-lib.so

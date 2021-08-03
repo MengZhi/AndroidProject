@@ -1,0 +1,3 @@
+/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/.cxx/Debug/215g4173/x86/CMakeFiles/rebuild_cache.dir
+/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/.cxx/Debug/215g4173/x86/CMakeFiles/edit_cache.dir
+/Users/mengzhi/AndroidProject/AndroidProject/MyApplication2/app/.cxx/Debug/215g4173/x86/CMakeFiles/native-lib.dir
