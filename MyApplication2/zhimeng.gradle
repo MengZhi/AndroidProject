@@ -7,9 +7,9 @@ ext {
     ]
 
     androidId = [
-            compileSdkVersion        : 30,
+            compileSdkVersion        : 29,
             applicationId            : "com.example.mengzhi.myapplication2",
-            minSdkVersion            : 30,
+            minSdkVersion            : 29,
             targetSdkVersion         : 29,
             versionCode              : 1,
             versionName              : "1.0",

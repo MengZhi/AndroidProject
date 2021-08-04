@@ -20,16 +20,16 @@ class JniTestingActivity: Activity() {
 
 
     // Java 本地方法  实现：native层
-    external fun getStringPwd(): String?
-    external fun getStringPwd2(): String?
+//    external fun getStringPwd(): String?
+//    external fun getStringPwd2(): String?
 
     // -------------  交互操作 JNI
-//    external fun changeName()
+    external fun changeName()
 //    external fun changeAge()
-//    external fun callAddMethod()
-
-
-    // 专门写一个函数，给native成调用
+    external fun callAddMethod()
+//
+//
+//     专门写一个函数，给native成调用
     fun add(number1: Int, number2: Int): Int {
         return number1 + number2 + 8
     }
@@ -40,10 +40,10 @@ class JniTestingActivity: Activity() {
 
         // Example of a call to a native method
         val tv: TextView = findViewById(R.id.sample_text)
-//        changeName()
+        changeName()
         tv.text = name
 //        changeAge()
-        tv.text = "" + age
+//        tv.text = "" + age
 //        callAddMethod()
     }
 }

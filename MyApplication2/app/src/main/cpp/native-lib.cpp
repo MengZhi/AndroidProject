@@ -1,4 +1,4 @@
-#include "com_derry_as_jni_project_MainActivity.h"
+#include "com_example_mengzhi_myapplication2_JniTestingActivity"
 
 // NDK工具链里面的 log 库 引入过来
 #include <android/log.h>
@@ -36,24 +36,24 @@ Java_com_derry_as_1jni_1project_MainActivity_getStringPwd
 }
 
 // 静态函数
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_derry_as_1jni_1project_MainActivity_getStringPwd2(JNIEnv *env, jclass clazz) {
-    // TODO: implement getStringPwd2()
-}
+//extern "C"
+//JNIEXPORT jstring JNICALL
+//Java_com_example_mengzhi_myapplication2_JniTestingActivity_getStringPwd2(JNIEnv *env, jclass clazz) {
+//    // TODO: implement getStringPwd2()
+//}
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_derry_as_1jni_1project_MainActivity_changeName(JNIEnv *env, jobject thiz) {
+Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeName(JNIEnv *env, jobject obj) {
    // 获取class
-   jclass j_cls = env->GetObjectClass(thiz);
+   jclass j_cls = env->GetObjectClass(obj);
 
    // 获取属性  L对象类型 都需要L
    // jfieldID GetFieldID(MainActivity.class, 属性名, 属性的签名)
    jfieldID j_fid = env->GetFieldID(j_cls, "name", "Ljava/lang/String;");
 
    // 转换工作
-   jstring j_str = static_cast<jstring>(env->GetObjectField(thiz ,j_fid));
+   jstring j_str = static_cast<jstring>(env->GetObjectField(obj , j_fid));
 
    // 打印字符串  目标
    char * c_str = const_cast<char *>(env->GetStringUTFChars(j_str, NULL));
@@ -63,30 +63,30 @@ Java_com_derry_as_1jni_1project_MainActivity_changeName(JNIEnv *env, jobject thi
 
     // 修改成 Beyond
     jstring jName = env->NewStringUTF("Beyond");
-    env->SetObjectField(thiz, j_fid, jName);
+    env->SetObjectField(obj, j_fid, jName);
 
    // printf()  C
    // cout << << endl; // C++
 }
 
+//extern "C"
+//JNIEXPORT void JNICALL
+//Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeAge(JNIEnv *env, jobject jcls) {
+//
+//    const char* sig = "I";
+//
+//   jfieldID j_fid = env->GetStaticFieldID(jcls, "age", sig);
+//
+//   jint age = env->GetStaticIntField(jcls, j_fid);
+//
+//   age += 10;
+//
+//   env->SetStaticIntField(jcls, j_fid, age);
+//}
+
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_derry_as_1jni_1project_MainActivity_changeAge(JNIEnv *env, jclass jcls) {
-
-    const char * sig = "I";
-
-   jfieldID j_fid = env->GetStaticFieldID(jcls, "age", sig);
-
-   jint age = env->GetStaticIntField(jcls, j_fid);
-
-   age += 10;
-
-   env->SetStaticIntField(jcls, j_fid, age);
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_derry_as_1jni_1project_MainActivity_callAddMethod(JNIEnv *env, jobject job) {
+Java_com_example_mengzhi_myapplication2_JniTestingActivity_callAddMethod(JNIEnv *env, jobject job) {
     // 自己得到 MainActivity.class
     jclass  mainActivityClass = env->GetObjectClass(job);
 
@@ -97,4 +97,9 @@ Java_com_derry_as_1jni_1project_MainActivity_callAddMethod(JNIEnv *env, jobject 
    jint sum = env->CallIntMethod(job, j_mid, 3, 3);
    LOGE("sum result:%d", sum);
 
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeAge(JNIEnv *env, jobject thiz) {
+    // TODO: implement changeAge()
 }

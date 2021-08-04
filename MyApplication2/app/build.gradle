@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 def androidId = rootProject.ext.androidId
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     defaultConfig {
         applicationId androidId.applicationId
         minSdkVersion androidId.minSdkVersion
@@ -37,8 +37,8 @@ android {
     }
 //    ndkPath = "/Users/mengzhi/Library/Android/sdk/ndk"
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     ndkVersion = "22.1.7171670"
