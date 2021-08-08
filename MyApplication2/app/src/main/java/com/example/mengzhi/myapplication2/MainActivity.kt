@@ -3,11 +3,20 @@ package com.example.mengzhi.myapplication2
 import android.animation.*
 import android.app.Activity
 import android.content.Intent
+import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.util.Log
+import android.view.Surface
+import android.view.TextureView
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
+import java.io.IOException
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 
 class MainActivity : Activity() {
@@ -16,6 +25,7 @@ class MainActivity : Activity() {
         setContentView(R.layout.hitouch_version)
         initButton()
         addAnimation()
+        attachVideo()
     }
 
     private fun initButton() {
@@ -23,6 +33,59 @@ class MainActivity : Activity() {
         button.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivityForResult(intent, 1)
+        }
+    }
+
+    private fun attachVideo() {
+        val textureView = findViewById<TextureView>(R.id.textureView)
+        textureView.surfaceTextureListener = getTextureListener()
+    }
+
+    private val mMediaPlayer = MediaPlayer()
+
+    private fun getTextureListener() : TextureView.SurfaceTextureListener {
+        return object : TextureView.SurfaceTextureListener{
+
+            override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
+                var s = Surface(surface)
+                try {
+                    val mediaUri =
+                        Uri.parse("android.resource://com.example.mengzhi.myapplication2/" + R.raw.candela_anim)
+                    mMediaPlayer.setDataSource(this@MainActivity, mediaUri)
+                    mMediaPlayer.setSurface(s)
+                    mMediaPlayer.prepare()
+//                    mMediaPlayer.setOnBufferingUpdateListener(this)
+//                    mMediaPlayer.setOnCompletionListener(this)
+//                    mMediaPlayer.setOnPreparedListener(this)
+//                    mMediaPlayer.setOnVideoSizeChangedListener(this)
+//                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+                    mMediaPlayer.start()
+                    mMediaPlayer.isLooping = true
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+            }
+
+            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
+                Log.d(TAG, "onSurfaceTextureSizeChanged")
+            }
+
+            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+                Log.d(TAG, "onSurfaceTextureDestroyed")
+                mMediaPlayer.stop()
+                return false
+            }
+
+            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+                Log.d(TAG, "onSurfaceTextureUpdated")
+            }
         }
     }
 
