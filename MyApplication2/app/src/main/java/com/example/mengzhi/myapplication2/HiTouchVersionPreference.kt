@@ -4,7 +4,6 @@ import android.content.Context
 import android.preference.Preference
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 
 class HiTouchVersionPreference : Preference {
@@ -13,7 +12,7 @@ class HiTouchVersionPreference : Preference {
         attrs,
         defStyleAttr
     ) {
-        widgetLayoutResource = R.layout.hitouch_version
+        widgetLayoutResource = R.layout.anim_activity_layout
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
