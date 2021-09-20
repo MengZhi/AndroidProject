@@ -24,6 +24,11 @@
             android:background="@color/colorAccent"
             android:text="Version:" />
     </FrameLayout>
+    <TextView
+        android:id="@+id/result_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="default value"/>
 
     <TextView
         android:id="@+id/hitouch_version"

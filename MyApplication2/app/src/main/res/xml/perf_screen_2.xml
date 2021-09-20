@@ -36,7 +36,7 @@
     <com.example.mengzhi.myapplication2.HiTouchVersionPreference
         android:id="@+id/first_switch2"
         android:key="hitouch_switch"
-        android:layout="@layout/hitouch_version"/>
+        android:layout="@layout/anim_activity_layout"/>
 
 
 </PreferenceScreen>

@@ -56,7 +56,7 @@ Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeName(JNIEnv *en
    jstring j_str = static_cast<jstring>(env->GetObjectField(obj , j_fid));
 
    // 打印字符串  目标
-   char * c_str = const_cast<char *>(env->GetStringUTFChars(j_str, NULL));
+    char * c_str = const_cast<char *>(env->GetStringUTFChars(j_str, NULL));
     LOGD("native : %s\n", c_str);
     LOGE("native : %s\n", c_str);
     LOGI("native : %s\n", c_str);
@@ -96,8 +96,8 @@ Java_com_example_mengzhi_myapplication2_JniTestingActivity_callAddMethod(JNIEnv 
    // 调用 Java的方法
    jint sum = env->CallIntMethod(job, j_mid, 3, 3);
    LOGE("sum result:%d", sum);
-
 }
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeAge(JNIEnv *env, jobject thiz) {
