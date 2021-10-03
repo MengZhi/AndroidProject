@@ -13,13 +13,17 @@ import android.widget.Button
 import android.widget.TextView
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.CountDownTimer
+import com.example.mengzhi.annotation.intdef.MyAnnotation
 import com.example.mengzhi.iotesting.Course
+import com.example.mengzhi.reflectTesting.TestClassLoader
+import com.example.mengzhi.reflectTesting.TestConstructor
+import com.example.mengzhi.reflectTesting.TestField
+import com.example.mengzhi.reflectTesting.TestMethod
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 
-
+@MyAnnotation()
 class AnimTestActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +32,14 @@ class AnimTestActivity : Activity() {
         addAnimation()
         attachVideo()
         initTextView(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        TestClassLoader().testClassLoader()
+        TestConstructor().testConstructor()
+        TestMethod().testMethod()
+        TestField().testField()
     }
 
     private fun initTextView(intent: Intent) {
