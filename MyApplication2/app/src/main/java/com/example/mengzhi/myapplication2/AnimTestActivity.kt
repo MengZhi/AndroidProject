@@ -15,6 +15,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import com.example.mengzhi.annotation.intdef.MyAnnotation
 import com.example.mengzhi.iotesting.Course
+import com.example.mengzhi.proxyTesting.Client
 import com.example.mengzhi.reflectTesting.TestClassLoader
 import com.example.mengzhi.reflectTesting.TestConstructor
 import com.example.mengzhi.reflectTesting.TestField
@@ -40,6 +41,8 @@ class AnimTestActivity : Activity() {
         TestConstructor().testConstructor()
         TestMethod().testMethod()
         TestField().testField()
+
+        Client.test()
     }
 
     private fun initTextView(intent: Intent) {
