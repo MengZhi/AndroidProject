@@ -11,18 +11,16 @@ class MarkCompany : InvocationHandler {
     var factory: Any? = null
 
     /*通过Proxy获得动态代理对象*/
-    val proxyInstance: Any
-        get() = Proxy.newProxyInstance(
+    val proxyInstance: Any = Proxy.newProxyInstance(
             factory!!.javaClass.classLoader,
-            factory!!.javaClass.interfaces, this
-        )
+            factory!!.javaClass.interfaces, this)
 
     /*通过动态代理对象方法进行增强*/
     @Throws(Throwable::class)
     override fun invoke(proxy: Any, method: Method, args: Array<Any>): Any? {
-        doSthAfter()
-        val result = method.invoke(factory, *args)
         doSthBefore()
+        val result = method.invoke(factory, *args)
+        doSthAfter()
         return result
     }
 

@@ -42,7 +42,7 @@ class AnimTestActivity : Activity() {
         TestMethod().testMethod()
         TestField().testField()
 
-        Client.test()
+//        Client.test()
     }
 
     private fun initTextView(intent: Intent) {

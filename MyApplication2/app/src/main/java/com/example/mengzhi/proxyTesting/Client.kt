@@ -19,11 +19,11 @@ object Client {
 //        av.saleWomanTools(1.8f);
 
         /*动态代理模式---------------*/
-        val aafactory: ManToolsFactory = AaFactory()
         val markCompany = MarkCompany()
-        markCompany.factory = aafactory
 
         //张三来了
+        val aafactory: ManToolsFactory = AaFactory()
+        markCompany.factory = aafactory
         val employee1 = markCompany.proxyInstance as ManToolsFactory
         employee1.saleManTools("E")
 

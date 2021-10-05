@@ -4,6 +4,7 @@ import com.example.mengzhi.proxyTesting.WomanToolsFactory
 
 class Alvin(womanToolsFactory: WomanToolsFactory) : WomanToolsFactory {
     private val womanToolsFactory: WomanToolsFactory
+
     override fun saleWomanTools(length: Float) {
         doSthBefore()
         womanToolsFactory.saleWomanTools(length)

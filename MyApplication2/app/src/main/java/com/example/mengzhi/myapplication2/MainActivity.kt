@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import com.example.mengzhi.annotationTesting.InjectUtils2
+import com.example.mengzhi.annotationTesting.OnClick
 import com.example.mengzhi.iotesting.Course
 
 class MainActivity : Activity() {
@@ -21,12 +23,25 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         testParcelButton = findViewById(R.id.parcel_btn)
-        showAnimActivityButton = findViewById(R.id.anim_btn)
-        showAnimActivityButton.setOnClickListener(getAnimBtnListener())
+//        showAnimActivityButton = findViewById(R.id.anim_btn)
+//        showAnimActivityButton.setOnClickListener(getAnimBtnListener())
         testParcelButton.setOnClickListener {
 //            getParcelBtnListener()
         }
         super.onResume()
+
+        InjectUtils2.injectEvent(this)
+    }
+
+    @OnClick([R.id.anim_btn])
+    fun onClick(view: View): Boolean {
+        val intent = Intent()
+        intent.setClass(this, AnimTestActivity::class.java)
+        intent.putExtra("course", getCourse())
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+        return false
     }
 
     private fun getCourse(): Course {
