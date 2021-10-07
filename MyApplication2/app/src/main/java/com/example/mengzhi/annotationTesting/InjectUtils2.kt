@@ -57,26 +57,17 @@ object InjectUtils2 {
             handler
         )
 
-        try {
-            // 遍历注解的值
-            for (viewId in viewIds) {
-                // 获得当前activity的view（赋值）
-                val view = activity.findViewById<View>(viewId)
-                // 获取指定的方法(不需要判断是Click还是LongClick)
-                // 如获得：setOnClickLisnter方法，参数为OnClickListener
-                // 获得 setOnLongClickLisnter，则参数为OnLongClickLisnter
-                // 获取指定的方法(不需要判断是Click还是LongClick)
-                // 如获得：setOnClickLisnter方法，参数为OnClickListener
-                // 获得 setOnLongClickLisnter，则参数为OnLongClickLisnter
-                val setter = view.javaClass.getMethod(listenerSetter, listenerType.java)
-//                val setter = view::class.members.find { it.name == listenerSetter }
-//                setter?.call(view, listenerProxy)
-                // 执行方法
-//                Log.i(TAG, setter.toString())
-                setter?.invoke(view, listenerProxy) //执行setOnclickListener里面的回调 onclick方法
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        // 遍历注解的值
+        for (viewId in viewIds) {
+            // 获得当前activity的view（赋值）
+            val view = activity.findViewById<View>(viewId)
+
+            val setter2 = view::class.members.find { it.name == listenerSetter }
+            setter2?.call(view, listenerProxy)
+
+//            val setter = view.javaClass.getMethod(listenerSetter, listenerType.java)
+//            // 执行方法
+//            setter.invoke(view, listenerProxy) //执行setOnclickListener里面的回调 onclick方法
         }
     }
 }
