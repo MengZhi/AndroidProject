@@ -48,7 +48,9 @@ class AnimTestActivity : Activity() {
     private fun initTextView(intent: Intent) {
         val scoreTextView = findViewById<TextView>(R.id.result_text_view)
         val score = intent.getParcelableExtra<Course>("course")
-        scoreTextView.text = "name: ${score.name}, score:${score.score}, Students:${score.studentList}"
+        if (score != null) {
+            scoreTextView.text = "name: ${score?.name}, score:${score?.score}, Students:${score?.studentList}"
+        }
     }
 
     private fun initButton() {
@@ -69,11 +71,7 @@ class AnimTestActivity : Activity() {
     private fun getTextureListener(): TextureView.SurfaceTextureListener {
         return object : TextureView.SurfaceTextureListener {
 
-            override fun onSurfaceTextureAvailable(
-                surface: SurfaceTexture?,
-                width: Int,
-                height: Int
-            ) {
+            override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
                 var s = Surface(surface)
                 try {
                     val mediaUri =
@@ -100,21 +98,17 @@ class AnimTestActivity : Activity() {
 
             }
 
-            override fun onSurfaceTextureSizeChanged(
-                surface: SurfaceTexture?,
-                width: Int,
-                height: Int
-            ) {
+            override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, width: Int, height: Int) {
                 Log.d(TAG, "onSurfaceTextureSizeChanged")
             }
 
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+            override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
                 Log.d(TAG, "onSurfaceTextureDestroyed")
                 mMediaPlayer.stop()
                 return false
             }
 
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+            override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
                 Log.d(TAG, "onSurfaceTextureUpdated")
             }
         }
