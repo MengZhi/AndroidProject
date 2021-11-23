@@ -1,2 +1,4 @@
 include ':app'
 include ':compiler'
+include ':login'
+include ':register'

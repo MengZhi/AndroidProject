@@ -1,0 +1,36 @@
+//plugins {
+//    id 'com.android.dynamic-feature'
+//    id 'kotlin-android'
+//}
+
+if (isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        if (!isRelease) {
+            applicationId appId.login
+        }
+        minSdkVersion androidId.minSdkVersion
+        targetSdkVersion androidId.targetSdkVersion
+        versionCode androidId.versionCode
+        versionName androidId.versionName
+        testInstrumentationRunner androidId.testInstrumentationRunner
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+//    implementation project(":app")
+    depenId.each { k, v -> implementation v }
+}
