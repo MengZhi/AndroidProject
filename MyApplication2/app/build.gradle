@@ -14,6 +14,12 @@ android {
         versionCode androidId.versionCode
         versionName androidId.versionName
         testInstrumentationRunner androidId.testInstrumentationRunner
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [student: "Hello this is student" ]
+            }
+        }
     }
     buildTypes {
         debug {
@@ -47,6 +53,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":myARouter-annotations")
 
     kapt project (':compiler')
 

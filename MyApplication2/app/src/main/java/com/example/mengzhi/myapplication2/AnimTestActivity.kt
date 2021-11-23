@@ -20,11 +20,12 @@ import com.example.mengzhi.reflectTesting.TestClassLoader
 import com.example.mengzhi.reflectTesting.TestConstructor
 import com.example.mengzhi.reflectTesting.TestField
 import com.example.mengzhi.reflectTesting.TestMethod
+import com.example.myarouter_annotations.MyARouter
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 
-@MyAnnotation()
+@MyARouter(path = "AnimTestActivity")
 class AnimTestActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
