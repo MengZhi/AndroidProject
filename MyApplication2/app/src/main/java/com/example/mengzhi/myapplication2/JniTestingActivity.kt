@@ -3,7 +3,9 @@ package com.example.mengzhi.myapplication2
 import android.app.Activity
 import android.os.Bundle
 import android.widget.TextView
+import com.example.myarouter_annotations.MyARouter
 
+@MyARouter(path = "JniTestingActivity")
 class JniTestingActivity: Activity() {
     companion object {
         init {
