@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation thirdParty.autoService
-
     implementation thirdParty.javaPoet
     implementation project(":myARouter-annotations")
 }

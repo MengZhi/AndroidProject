@@ -17,7 +17,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [student: "Hello this is student" ]
+                arguments = [moduleName: project.getName(), packageNameForAPT: packageNameForAPT, student: "hello this is student" ]
             }
         }
     }
