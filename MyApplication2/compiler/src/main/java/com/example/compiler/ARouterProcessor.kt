@@ -4,16 +4,33 @@ import com.example.compiler.utils.ProcessorConfig
 import com.example.compiler.utils.ProcessorUtils
 import com.example.myarouter_annotations.MyARouter
 import com.example.myarouter_annotations.RouterBean
+import com.google.auto.service.AutoService
+import com.squareup.javapoet.*
+import java.io.IOException
+import java.lang.RuntimeException
+import java.util.ArrayList
+import java.util.HashMap
 import javax.annotation.processing.*
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 import javax.lang.model.util.Elements
+import javax.lang.model.util.Types
 import javax.tools.Diagnostic
 
-@SupportedAnnotationTypes("com.example.myarouter_annotations.MyARouter")
+// 允许/支持的注解类型，让注解处理器处理
+@SupportedAnnotationTypes(ProcessorConfig.AROUTER_PACKAGE) // 指定JDK编译版本
+
+// 注解处理器接收的参数
+@SupportedOptions(ProcessorConfig.OPTIONS, ProcessorConfig.APT_PACKAGE)
+@AutoService(Processor::class) // 允许/支持的注解类型，让注解处理器处理
+
+
 class ARouterProcessor : AbstractProcessor() {
     private lateinit var messager: Messager
 
     private lateinit var elementTool: Elements
+    
+    private lateinit var typeTool: Types
 
     private lateinit var filer: Filer
 
@@ -21,15 +38,16 @@ class ARouterProcessor : AbstractProcessor() {
 
     private var aptPackage : String? = null // 各个模块传递过来的目录 用于统一存放 apt生成的文件
 
-    private val allPathMap: Map<String, List<RouterBean>> = mutableMapOf()
+    private val allPathMap = mutableMapOf<String, MutableList<RouterBean>>()
 
-    private val allGroupMap: Map<String, String> = mutableMapOf()
+    private val allGroupMap = mutableMapOf<String, String>()
 
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
 
         messager = processingEnv.messager
         elementTool = processingEnv.elementUtils
+        typeTool = processingEnv.typeUtils
         filer = processingEnv.filer
 
         // 只有接受到 App壳 传递过来的书籍，才能证明我们的 APT环境搭建完成
@@ -150,8 +168,231 @@ class ARouterProcessor : AbstractProcessor() {
                 .addPath(myARouter.path)
                 .addElement(ele)
                 .build()
+            
+            val eleType = ele.asType()
+            val activityType = elementTool.getTypeElement(ProcessorConfig.ACTIVITY_PACKAGE)
+            val activityMirror = activityType.asType()
+            if (typeTool.isSameType(eleType, activityMirror)) {
+                routerBean.setTypeEnum(RouterBean.TypeEnum.ACTIVITY)
+            } else {
+                // 不匹配抛出异常，这里谨慎使用！考虑维护问题
+                throw RuntimeException("@ARouter注解目前仅限用于Activity类之上")
+            }
+
+            if (checkRouterPath(routerBean)) {
+                messager.printMessage(Diagnostic.Kind.NOTE, "RouterBean Check Success:$routerBean")
+                // 赋值 mAllPathMap 集合里面去
+
+                // 赋值 mAllPathMap 集合里面去
+                var routerBeans: MutableList<RouterBean>? = allPathMap[routerBean.getGroup()]
+
+                // 如果从Map中找不到key为：bean.getGroup()的数据，就新建List集合再添加进Map
+                if (ProcessorUtils.isEmpty(routerBeans)) { // 仓库一 没有东西
+                    routerBeans = ArrayList()
+                    routerBeans.add(routerBean)
+                    allPathMap[routerBean.getGroup()] = routerBeans // 加入仓库一
+                } else {
+                    routerBeans?.add(routerBean)
+                }
+            } else { // ERROR 编译期发生异常
+                messager.printMessage(Diagnostic.Kind.ERROR, "@ARouter注解未按规范配置，如：/app/MainActivity")
+            }
+
+            val pathType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_PATH)
+            val groupType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_GROUP)
+
+            // TODO 第一大步：系列PATH
+            try {
+                createPathFile(pathType) // 生成 Path类
+            } catch (e: IOException) {
+                e.printStackTrace()
+                messager.printMessage(Diagnostic.Kind.NOTE, "在生成PATH模板时，异常了 e:" + e.message)
+            }
+
+            // TODO 第二大步：组头（带头大哥）
+
+            // TODO 第二大步：组头（带头大哥）
+            try {
+                createGroupFile(groupType, pathType)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                messager.printMessage(Diagnostic.Kind.NOTE, "在生成GROUP模板时，异常了 e:" + e.message)
+            }
+
         }
         return true
+    }
+
+    //生成如下代码
+//    public class ARouter$$Path$$personal implements ARouterPath {
+//        @Override
+//        public Map<String, RouterBean> getPathMap() {
+//            Map<String, RouterBean> pathMap = new HashMap<>();
+//            pathMap.put("/personal/Personal_Main2Activity", RouterBean.create());
+//            pathMap.put("/personal/Personal_MainActivity", RouterBean.create());
+//            return pathMap;
+//        }
+//    }
+    @Throws(IOException::class)
+    private fun createPathFile(pathType: TypeElement) {
+        // 判断 map仓库中，是否有需要生成的文件
+
+        // 判断 map仓库中，是否有需要生成的文件
+        if (ProcessorUtils.isEmpty(allPathMap)) {
+            return  // 连缓存一 仓库一 里面 值都没有 不用干活了
+        }
+
+        // 生成 MutableMap<String, RouterBean> 类型的返回值
+        val methodReturn = ParameterizedTypeName.get(
+            ClassName.get(MutableMap::class.java),
+            ClassName.get(String::class.java),
+            ClassName.get(RouterBean::class.java)
+        )
+
+        allPathMap.forEach { pathMapEntry ->
+            val methodBuilder = MethodSpec.methodBuilder(ProcessorConfig.PATH_METHOD_NAME)
+                .addAnnotation(Override::class.java)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(methodReturn)
+
+            // Map<String, RouterBean> pathMap = new HashMap<>(); // $N == 变量 为什么是这个，因为变量有引用 所以是$N
+            methodBuilder.addStatement("\$T<\$T, \$T> \$N = new \$T<>()",
+                ClassName.get(MutableMap::class.java),  // Map
+                ClassName.get(String::class.java),  // Map<String,
+                ClassName.get(RouterBean::class.java),  // Map<String, RouterBean>
+                ProcessorConfig.PATH_VAR1,  // Map<String, RouterBean> pathMap
+                ClassName.get(HashMap::class.java) // Map<String, RouterBean> pathMap = new HashMap<>();
+            )
+
+            // 因为有多个,所以要循环
+            // pathMap.put("/personal/Personal_Main2Activity", RouterBean.create(RouterBean.TypeEnum.ACTIVITY,
+            // Personal_Main2Activity.class);
+            // pathMap.put("/personal/Personal_MainActivity", RouterBean.create(RouterBean.TypeEnum.ACTIVITY));
+            // $N == 变量 变量有引用 所以 N
+            // $L == TypeEnum.ACTIVITY
+            val pathList: List<RouterBean> = pathMapEntry.value
+            pathList.forEach{
+                methodBuilder.addStatement(
+                    "\$N.put(\$S, \$T.create(\$T.\$L, \$T.class, \$S, \$S))",
+                    ProcessorConfig.PATH_VAR1,  // pathMap.put
+                    it.getPath(),  // "/personal/Personal_Main2Activity"
+                    ClassName.get(RouterBean::class.java),  // RouterBean
+                    ClassName.get(RouterBean.TypeEnum::class.java),  // RouterBean.Type
+                    it.getTypeEnum(),  // 枚举类型：ACTIVITY
+                    ClassName.get(it.getElement() as? TypeElement),  // MainActivity.class Main2Activity.class
+                    it.getPath(),  // 路径名
+                    it.getGroup() // 组名
+                )
+            }
+
+            // return pathMap;
+            methodBuilder.addStatement("return \$N", ProcessorConfig.PATH_VAR1)
+
+            // TODO 注意：不能像以前一样，1.方法，2.类  3.包， 因为这里面有implements ，所以 方法和类要合为一体生成才行，这是特殊情况
+            // 最终生成的类文件名  ARouter$$Path$$personal
+            val finalClassName: String = ProcessorConfig.PATH_FILE_NAME + pathMapEntry.key
+            messager.printMessage(Diagnostic.Kind.NOTE,
+                "APT生成路由Path类文件：$aptPackage.$finalClassName")
+
+
+            // 生成类文件：ARouter$$Path$$personal
+            JavaFile.builder(
+                aptPackage,  // 包名  APT 存放的路径
+                TypeSpec.classBuilder(finalClassName) // 类名
+                    .addSuperinterface(ClassName.get(pathType)) // 实现ARouterLoadPath接口  implements ARouterPath==pathType
+                    .addModifiers(Modifier.PUBLIC) // public修饰符
+                    .addMethod(methodBuilder.build()) // 方法的构建（方法参数 + 方法体）
+                    .build()
+            ).build() // JavaFile构建完成
+             .writeTo(filer) // 文件生成器开始生成类文件
+
+            // 仓库二 缓存二  非常重要一步，注意：PATH 路径文件生成出来了，才能赋值路由组mAllGroupMap
+            allGroupMap[pathMapEntry.key] = finalClassName
+
+        }
+    }
+
+    //生成如下代码
+    //public class ARouter$$Group$$personal implements ARouterGroup {
+    //  @Override
+    //  public Map<String, Class<? extends ARouterPath>> getGroupMap() {
+    //    Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
+    //    groupMap.put("personal", ARouter$$Path$$personal.class);
+    //    return groupMap;
+    //  }
+    //}
+    @Throws(IOException::class)
+    private fun createGroupFile(groupType: TypeElement, pathType: TypeElement) {
+        // 仓库二 缓存二 判断是否有需要生成的类文件
+        if (ProcessorUtils.isEmpty(allGroupMap) || ProcessorUtils.isEmpty(allPathMap)) return
+
+        // 返回值 这一段 Map<String, Class<? extends ARouterPath>>
+        val methodReturn = ParameterizedTypeName.get(
+            ClassName.get(MutableMap::class.java),// Map
+            ClassName.get(String::class.java),    // Map<String,
+            ParameterizedTypeName.get(
+                ClassName.get(Class::class.java), // ? extends ARouterPath
+                WildcardTypeName.subtypeOf(ClassName.get(pathType))))
+
+        // 1.方法 public Map<String, Class<? extends ARouterPath>> getGroupMap() {
+        val methodBuidler = MethodSpec.methodBuilder(ProcessorConfig.GROUP_METHOD_NAME) // 方法名
+                .addAnnotation(Override::class.java) // 重写注解 @Override
+                .addModifiers(Modifier.PUBLIC) // public修饰符
+                .returns(methodReturn) // 方法返回值
+
+        // Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
+
+        // Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
+        methodBuidler.addStatement("\$T<\$T, \$T> \$N = new \$T<>()",
+            ClassName.get(MutableMap::class.java),
+            ClassName.get(String::class.java),  // Class<? extends ARouterPath> 难度
+            ParameterizedTypeName.get(
+                ClassName.get(Class::class.java),
+                WildcardTypeName.subtypeOf(ClassName.get(pathType))
+            ),  // ? extends ARouterPath
+            ProcessorConfig.GROUP_VAR1,
+            ClassName.get(HashMap::class.java)
+        )
+
+        //  groupMap.put("personal", ARouter$$Path$$personal.class);
+        //	groupMap.put("order", ARouter$$Path$$order.class);
+
+        //  groupMap.put("personal", ARouter$$Path$$personal.class);
+        //	groupMap.put("order", ARouter$$Path$$order.class);
+        for ((key, value) in allGroupMap.entries) {
+            methodBuidler.addStatement(
+                "\$N.put(\$S, \$T.class)",
+                ProcessorConfig.GROUP_VAR1,  // groupMap.put
+                key,  // order, personal ,app
+                ClassName.get(aptPackage, value)
+            )
+        }
+
+        // return groupMap;
+
+        // return groupMap;
+        methodBuidler.addStatement("return \$N", ProcessorConfig.GROUP_VAR1)
+
+        // 最终生成的类文件名 ARouter$$Group$$ + personal
+
+        // 最终生成的类文件名 ARouter$$Group$$ + personal
+        val finalClassName: String = ProcessorConfig.GROUP_FILE_NAME.toString() + options
+
+        messager.printMessage(
+            Diagnostic.Kind.NOTE, "APT生成路由组Group类文件：" +
+                    aptPackage + "." + finalClassName)
+
+        // 生成类文件：ARouter$$Group$$app
+
+        // 生成类文件：ARouter$$Group$$app
+        JavaFile.builder(
+            aptPackage,  // 包名
+            TypeSpec.classBuilder(finalClassName) // 类名
+                .addSuperinterface(ClassName.get(groupType)) // 实现ARouterLoadGroup接口 implements ARouterGroup
+                .addModifiers(Modifier.PUBLIC) // public修饰符
+                .addMethod(methodBuidler.build()) // 方法的构建（方法参数 + 方法体）
+                .build()
+        ).build().writeTo(filer) // 文件生成器开始生成类文件
     }
 
     /**

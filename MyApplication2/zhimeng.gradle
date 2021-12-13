@@ -25,7 +25,7 @@ ext {
     ]
 
     // 定义一个包名，用于存放APT生成的所有类文件
-    packageNameForAPT = "com.example.new_modular_customarouter";
+    packageNameForAPT = "com.example.mengzhi.myapplication2.new_modular_customarouter";
 
     appId = [
             app: "com.example.mengzhi.myapplication2",

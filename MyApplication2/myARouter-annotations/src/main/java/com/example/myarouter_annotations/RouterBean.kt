@@ -2,7 +2,7 @@ package com.example.myarouter_annotations
 
 import javax.lang.model.element.Element
 
-public class RouterBean {
+class RouterBean {
     // 为了以后的发展
     enum class TypeEnum {
         ACTIVITY
@@ -16,8 +16,7 @@ public class RouterBean {
             : Class<*>? = null
     private var path // 路由地址  例如：/app/MainActivity
             : String? = null
-    private var group // 路由组  例如：app  order  personal
-            : String? = null
+    private var group = ""// 路由组  例如：app  order  personal
 
     // TODO 以下是一组 Get 方法
     fun getTypeEnum(): TypeEnum? {
@@ -36,7 +35,7 @@ public class RouterBean {
         return path
     }
 
-    fun getGroup(): String? {
+    fun getGroup(): String {
         return group
     }
 
@@ -56,7 +55,7 @@ public class RouterBean {
         this.path = path
     }
 
-    fun setGroup(group: String?) {
+    fun setGroup(group: String) {
         this.group = group
     }
 
@@ -110,7 +109,7 @@ public class RouterBean {
         var path: String? = null
 
         // 路由组
-        var group: String? = null
+        var group: String = ""
         fun addType(type: TypeEnum?): Builder {
             this.type = type
             return this
@@ -131,7 +130,7 @@ public class RouterBean {
             return this
         }
 
-        fun addGroup(group: String?): Builder {
+        fun addGroup(group: String): Builder {
             this.group = group
             return this
         }

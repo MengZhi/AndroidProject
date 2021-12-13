@@ -1,6 +1,7 @@
 package com.example.compiler
 
 import com.example.myarouter_annotations.MyARouter
+import com.google.auto.service.AutoService
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
@@ -16,6 +17,7 @@ import javax.tools.Diagnostic
 
 @SupportedAnnotationTypes("com.example.myarouter_annotations.MyARouter")
 @SupportedOptions("student")
+@AutoService(Processor::class) // 允许/支持的注解类型，让注解处理器处理
 //@SupportedSourceVersion(SourceVersion.RELEASE_8)
 class TestProcessor : AbstractProcessor() {
     private lateinit var elementTool: Elements
@@ -65,7 +67,7 @@ class TestProcessor : AbstractProcessor() {
                 messager.printMessage(Diagnostic.Kind.NOTE, "generate file fail" + e.message)
             }
         }
-        return false
+        return true
     }
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {

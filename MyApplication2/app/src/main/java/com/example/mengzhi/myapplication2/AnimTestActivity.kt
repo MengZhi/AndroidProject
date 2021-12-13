@@ -25,7 +25,7 @@ import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 
-@MyARouter(path = "AnimTestActivity")
+@MyARouter(path = "/app/AnimTestActivity")
 class AnimTestActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
