@@ -1,5 +1,5 @@
 package com.example.myarouterapi
 
 interface ARouterGroup {
-    fun getGroupMap(): Map<String, Class<in ARouterPath>>
+    fun getGroupMap(): Map<String, Class<out ARouterPath>>
 }

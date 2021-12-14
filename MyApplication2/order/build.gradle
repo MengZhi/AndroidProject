@@ -41,4 +41,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     depenId.each { k, v -> implementation v }
+
+    // 公共基础库
+    implementation project(":common")
 }

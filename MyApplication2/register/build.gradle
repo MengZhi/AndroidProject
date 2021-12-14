@@ -33,4 +33,6 @@ android {
 
 dependencies {
     depenId.each { k, v -> implementation v }
+    // 公共基础库
+    implementation project(":common")
 }

@@ -28,5 +28,7 @@ android {
 
 dependencies {
     implementation project(":myARouter-annotations")
+    // 公共基础库
+    implementation project(":common")
     depenId.each { k, v -> implementation v }
 }

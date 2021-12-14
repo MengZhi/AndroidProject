@@ -7,9 +7,7 @@ import com.example.myarouter_annotations.RouterBean
 import com.google.auto.service.AutoService
 import com.squareup.javapoet.*
 import java.io.IOException
-import java.lang.RuntimeException
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import javax.annotation.processing.*
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
@@ -22,21 +20,19 @@ import javax.tools.Diagnostic
 
 // 注解处理器接收的参数
 @SupportedOptions(ProcessorConfig.OPTIONS, ProcessorConfig.APT_PACKAGE)
-@AutoService(Processor::class) // 允许/支持的注解类型，让注解处理器处理
-
 
 class ARouterProcessor : AbstractProcessor() {
     private lateinit var messager: Messager
 
     private lateinit var elementTool: Elements
-    
+
     private lateinit var typeTool: Types
 
     private lateinit var filer: Filer
 
-    private var options : String? = null // 各个模块传递过来的模块名 例如：app order personal
+    private var options: String? = null // 各个模块传递过来的模块名 例如：app order personal
 
-    private var aptPackage : String? = null // 各个模块传递过来的目录 用于统一存放 apt生成的文件
+    private var aptPackage: String? = null // 各个模块传递过来的目录 用于统一存放 apt生成的文件
 
     private val allPathMap = mutableMapOf<String, MutableList<RouterBean>>()
 
@@ -68,6 +64,7 @@ class ARouterProcessor : AbstractProcessor() {
             val className = ele.simpleName.toString()
             val finalClassName = "$className$$$$\$MyARouter"
             messager.printMessage(Diagnostic.Kind.NOTE, className + "被MyARouter注册")
+            messager.printMessage(Diagnostic.Kind.NOTE, "packageName: " + packageName)
 
             val myARouter = ele.getAnnotation(MyARouter::class.java)
 
@@ -168,15 +165,16 @@ class ARouterProcessor : AbstractProcessor() {
                 .addPath(myARouter.path)
                 .addElement(ele)
                 .build()
-            
+
             val eleType = ele.asType()
             val activityType = elementTool.getTypeElement(ProcessorConfig.ACTIVITY_PACKAGE)
             val activityMirror = activityType.asType()
-            if (typeTool.isSameType(eleType, activityMirror)) {
+            if (typeTool.isSubtype(eleType, activityMirror)) {
                 routerBean.setTypeEnum(RouterBean.TypeEnum.ACTIVITY)
             } else {
+                messager.printMessage(Diagnostic.Kind.ERROR, ">>>>>>>>>>>>>" + eleType)
                 // 不匹配抛出异常，这里谨慎使用！考虑维护问题
-                throw RuntimeException("@ARouter注解目前仅限用于Activity类之上")
+                throw RuntimeException("@MyARouter注解目前仅限用于Activity类之上")
             }
 
             if (checkRouterPath(routerBean)) {
@@ -203,6 +201,12 @@ class ARouterProcessor : AbstractProcessor() {
 
             // TODO 第一大步：系列PATH
             try {
+                messager.printMessage(
+                    Diagnostic.Kind.NOTE,
+                    "pathType: ${ProcessorConfig.AROUTER_API_PATH}"
+                )
+                messager.printMessage(Diagnostic.Kind.NOTE, "pathType: ${pathType}")
+                messager.printMessage(Diagnostic.Kind.NOTE, "groupType: ${groupType}")
                 createPathFile(pathType) // 生成 Path类
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -256,7 +260,8 @@ class ARouterProcessor : AbstractProcessor() {
                 .returns(methodReturn)
 
             // Map<String, RouterBean> pathMap = new HashMap<>(); // $N == 变量 为什么是这个，因为变量有引用 所以是$N
-            methodBuilder.addStatement("\$T<\$T, \$T> \$N = new \$T<>()",
+            methodBuilder.addStatement(
+                "\$T<\$T, \$T> \$N = new \$T<>()",
                 ClassName.get(MutableMap::class.java),  // Map
                 ClassName.get(String::class.java),  // Map<String,
                 ClassName.get(RouterBean::class.java),  // Map<String, RouterBean>
@@ -271,7 +276,7 @@ class ARouterProcessor : AbstractProcessor() {
             // $N == 变量 变量有引用 所以 N
             // $L == TypeEnum.ACTIVITY
             val pathList: List<RouterBean> = pathMapEntry.value
-            pathList.forEach{
+            pathList.forEach {
                 methodBuilder.addStatement(
                     "\$N.put(\$S, \$T.create(\$T.\$L, \$T.class, \$S, \$S))",
                     ProcessorConfig.PATH_VAR1,  // pathMap.put
@@ -291,8 +296,10 @@ class ARouterProcessor : AbstractProcessor() {
             // TODO 注意：不能像以前一样，1.方法，2.类  3.包， 因为这里面有implements ，所以 方法和类要合为一体生成才行，这是特殊情况
             // 最终生成的类文件名  ARouter$$Path$$personal
             val finalClassName: String = ProcessorConfig.PATH_FILE_NAME + pathMapEntry.key
-            messager.printMessage(Diagnostic.Kind.NOTE,
-                "APT生成路由Path类文件：$aptPackage.$finalClassName")
+            messager.printMessage(
+                Diagnostic.Kind.NOTE,
+                "APT生成路由Path类文件：$aptPackage.$finalClassName"
+            )
 
 
             // 生成类文件：ARouter$$Path$$personal
@@ -304,11 +311,10 @@ class ARouterProcessor : AbstractProcessor() {
                     .addMethod(methodBuilder.build()) // 方法的构建（方法参数 + 方法体）
                     .build()
             ).build() // JavaFile构建完成
-             .writeTo(filer) // 文件生成器开始生成类文件
+                .writeTo(filer) // 文件生成器开始生成类文件
 
             // 仓库二 缓存二  非常重要一步，注意：PATH 路径文件生成出来了，才能赋值路由组mAllGroupMap
             allGroupMap[pathMapEntry.key] = finalClassName
-
         }
     }
 
@@ -332,18 +338,21 @@ class ARouterProcessor : AbstractProcessor() {
             ClassName.get(String::class.java),    // Map<String,
             ParameterizedTypeName.get(
                 ClassName.get(Class::class.java), // ? extends ARouterPath
-                WildcardTypeName.subtypeOf(ClassName.get(pathType))))
+                WildcardTypeName.subtypeOf(ClassName.get(pathType))
+            )
+        )
 
         // 1.方法 public Map<String, Class<? extends ARouterPath>> getGroupMap() {
         val methodBuidler = MethodSpec.methodBuilder(ProcessorConfig.GROUP_METHOD_NAME) // 方法名
-                .addAnnotation(Override::class.java) // 重写注解 @Override
-                .addModifiers(Modifier.PUBLIC) // public修饰符
-                .returns(methodReturn) // 方法返回值
+            .addAnnotation(Override::class.java) // 重写注解 @Override
+            .addModifiers(Modifier.PUBLIC) // public修饰符
+            .returns(methodReturn) // 方法返回值
 
         // Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
 
         // Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
-        methodBuidler.addStatement("\$T<\$T, \$T> \$N = new \$T<>()",
+        methodBuidler.addStatement(
+            "\$T<\$T, \$T> \$N = new \$T<>()",
             ClassName.get(MutableMap::class.java),
             ClassName.get(String::class.java),  // Class<? extends ARouterPath> 难度
             ParameterizedTypeName.get(
@@ -380,7 +389,8 @@ class ARouterProcessor : AbstractProcessor() {
 
         messager.printMessage(
             Diagnostic.Kind.NOTE, "APT生成路由组Group类文件：" +
-                    aptPackage + "." + finalClassName)
+                    aptPackage + "." + finalClassName
+        )
 
         // 生成类文件：ARouter$$Group$$app
 

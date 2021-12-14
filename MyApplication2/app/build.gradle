@@ -55,13 +55,22 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":myARouter-annotations")
 
+    // 公共基础库
+    implementation project(":common")
+
     kapt project (':compiler')
 
     depenId.each { k, v -> implementation v }
 
-//    testImplementation 'junit:junit:4.13.2'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    if (isRelease) {
+        // 进if，集成，融为一体（order，personal）
+
+        // 订单模块
+        implementation project(":order")
+
+        // 个人中心模块
+        implementation project(":personal")
+    }
 }
 repositories {
     mavenCentral()

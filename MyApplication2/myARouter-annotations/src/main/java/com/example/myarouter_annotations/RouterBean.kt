@@ -82,6 +82,7 @@ class RouterBean {
     companion object {
         // 对外暴露
         // 对外提供简易版构造方法，主要是为了方便APT生成代码
+        @JvmStatic
         fun create(
             type: TypeEnum,
             clazz: Class<*>,
@@ -91,6 +92,17 @@ class RouterBean {
             return RouterBean(type, clazz, path, group)
         }
     }
+
+//    // 对外暴露
+//    // 对外提供简易版构造方法，主要是为了方便APT生成代码
+//    fun create(
+//        type: TypeEnum,
+//        clazz: Class<*>,
+//        path: String,
+//        group: String
+//    ): RouterBean {
+//        return RouterBean(type, clazz, path, group)
+//    }
 
     /**
      * 构建者模式
