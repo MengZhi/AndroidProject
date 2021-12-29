@@ -20,22 +20,15 @@ import javax.tools.Diagnostic
 
 // 注解处理器接收的参数
 @SupportedOptions(ProcessorConfig.OPTIONS, ProcessorConfig.APT_PACKAGE)
-
 class ARouterProcessor : AbstractProcessor() {
     private lateinit var messager: Messager
-
     private lateinit var elementTool: Elements
-
     private lateinit var typeTool: Types
-
     private lateinit var filer: Filer
 
     private var options: String? = null // 各个模块传递过来的模块名 例如：app order personal
-
     private var aptPackage: String? = null // 各个模块传递过来的目录 用于统一存放 apt生成的文件
-
     private val allPathMap = mutableMapOf<String, MutableList<RouterBean>>()
-
     private val allGroupMap = mutableMapOf<String, String>()
 
     override fun init(processingEnv: ProcessingEnvironment) {

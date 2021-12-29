@@ -21,12 +21,16 @@ import com.example.mengzhi.reflectTesting.TestConstructor
 import com.example.mengzhi.reflectTesting.TestField
 import com.example.mengzhi.reflectTesting.TestMethod
 import com.example.myarouter_annotations.MyARouter
+import com.example.myarouter_annotations.MyParam
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 
 @MyARouter(path = "/app/AnimTestActivity")
 class AnimTestActivity : Activity() {
+    @MyParam
+    lateinit var name: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.anim_activity_layout)

@@ -1,2 +1,3 @@
 com.example.compiler.ARouterProcessor
+com.example.compiler.ParameterProcessor
 com.example.compiler.TestProcessor
