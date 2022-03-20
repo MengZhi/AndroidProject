@@ -4,7 +4,6 @@ import com.example.compiler.utils.ProcessorConfig
 import com.example.compiler.utils.ProcessorUtils
 import com.example.myarouter_annotations.MyARouter
 import com.example.myarouter_annotations.RouterBean
-import com.google.auto.service.AutoService
 import com.squareup.javapoet.*
 import java.io.IOException
 import java.util.*
@@ -52,12 +51,18 @@ class ARouterProcessor : AbstractProcessor() {
         roundEnv: RoundEnvironment
     ): Boolean {
         val elements = roundEnv.getElementsAnnotatedWith(MyARouter::class.java)
+        val activityType = elementTool.getTypeElement(ProcessorConfig.ACTIVITY_PACKAGE)
+        val activityMirror = activityType.asType()
+
         for (ele in elements) {
             val packageName = elementTool.getPackageOf(ele).qualifiedName.toString()
             val className = ele.simpleName.toString()
             val finalClassName = "$className$$$$\$MyARouter"
             messager.printMessage(Diagnostic.Kind.NOTE, className + "被MyARouter注册")
             messager.printMessage(Diagnostic.Kind.NOTE, "packageName: " + packageName)
+
+            val callType = elementTool.getTypeElement(ProcessorConfig.AROUTER_AIP_CALL)
+            val callMirror = callType.asType()
 
             val myARouter = ele.getAnnotation(MyARouter::class.java)
 
@@ -159,20 +164,24 @@ class ARouterProcessor : AbstractProcessor() {
                 .addElement(ele)
                 .build()
 
-            val eleType = ele.asType()
-            val activityType = elementTool.getTypeElement(ProcessorConfig.ACTIVITY_PACKAGE)
-            val activityMirror = activityType.asType()
-            if (typeTool.isSubtype(eleType, activityMirror)) {
-                routerBean.setTypeEnum(RouterBean.TypeEnum.ACTIVITY)
-            } else {
-                messager.printMessage(Diagnostic.Kind.ERROR, ">>>>>>>>>>>>>" + eleType)
-                // 不匹配抛出异常，这里谨慎使用！考虑维护问题
-                throw RuntimeException("@MyARouter注解目前仅限用于Activity类之上")
+            val eleMirror = ele.asType()
+
+            when {
+                typeTool.isSubtype(eleMirror, activityMirror) -> {
+                    routerBean.setTypeEnum(RouterBean.TypeEnum.ACTIVITY)
+                }
+//                typeTool.isSubtype(eleMirror, callMirror) -> {
+//                    routerBean.setTypeEnum(RouterBean.TypeEnum.CALL)
+//                }
+                else -> {
+                    messager.printMessage(Diagnostic.Kind.ERROR, ">>>>>>>>>>>>>$eleMirror")
+                    // 不匹配抛出异常，这里谨慎使用！考虑维护问题
+                    throw RuntimeException("@MyARouter注解目前仅限用于Activity类之上")
+                }
             }
 
             if (checkRouterPath(routerBean)) {
                 messager.printMessage(Diagnostic.Kind.NOTE, "RouterBean Check Success:$routerBean")
-                // 赋值 mAllPathMap 集合里面去
 
                 // 赋值 mAllPathMap 集合里面去
                 var routerBeans: MutableList<RouterBean>? = allPathMap[routerBean.getGroup()]
@@ -188,34 +197,30 @@ class ARouterProcessor : AbstractProcessor() {
             } else { // ERROR 编译期发生异常
                 messager.printMessage(Diagnostic.Kind.ERROR, "@ARouter注解未按规范配置，如：/app/MainActivity")
             }
+        }
+        val pathType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_PATH)
+        val groupType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_GROUP)
 
-            val pathType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_PATH)
-            val groupType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_GROUP)
+        // TODO 第一大步：系列PATH
+        try {
+            messager.printMessage(
+                Diagnostic.Kind.NOTE,
+                "pathType: ${ProcessorConfig.AROUTER_API_PATH}"
+            )
+            messager.printMessage(Diagnostic.Kind.NOTE, "pathType: ${pathType}")
+            messager.printMessage(Diagnostic.Kind.NOTE, "groupType: ${groupType}")
+            createPathFile(pathType) // 生成 Path类
+        } catch (e: IOException) {
+            e.printStackTrace()
+            messager.printMessage(Diagnostic.Kind.NOTE, "在生成PATH模板时，异常了 e:" + e.message)
+        }
 
-            // TODO 第一大步：系列PATH
-            try {
-                messager.printMessage(
-                    Diagnostic.Kind.NOTE,
-                    "pathType: ${ProcessorConfig.AROUTER_API_PATH}"
-                )
-                messager.printMessage(Diagnostic.Kind.NOTE, "pathType: ${pathType}")
-                messager.printMessage(Diagnostic.Kind.NOTE, "groupType: ${groupType}")
-                createPathFile(pathType) // 生成 Path类
-            } catch (e: IOException) {
-                e.printStackTrace()
-                messager.printMessage(Diagnostic.Kind.NOTE, "在生成PATH模板时，异常了 e:" + e.message)
-            }
-
-            // TODO 第二大步：组头（带头大哥）
-
-            // TODO 第二大步：组头（带头大哥）
-            try {
-                createGroupFile(groupType, pathType)
-            } catch (e: IOException) {
-                e.printStackTrace()
-                messager.printMessage(Diagnostic.Kind.NOTE, "在生成GROUP模板时，异常了 e:" + e.message)
-            }
-
+        // TODO 第二大步：组头（带头大哥）
+        try {
+            createGroupFile(groupType, pathType)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            messager.printMessage(Diagnostic.Kind.NOTE, "在生成GROUP模板时，异常了 e:" + e.message)
         }
         return true
     }
@@ -342,8 +347,6 @@ class ARouterProcessor : AbstractProcessor() {
             .returns(methodReturn) // 方法返回值
 
         // Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
-
-        // Map<String, Class<? extends ARouterPath>> groupMap = new HashMap<>();
         methodBuidler.addStatement(
             "\$T<\$T, \$T> \$N = new \$T<>()",
             ClassName.get(MutableMap::class.java),
@@ -358,9 +361,6 @@ class ARouterProcessor : AbstractProcessor() {
 
         //  groupMap.put("personal", ARouter$$Path$$personal.class);
         //	groupMap.put("order", ARouter$$Path$$order.class);
-
-        //  groupMap.put("personal", ARouter$$Path$$personal.class);
-        //	groupMap.put("order", ARouter$$Path$$order.class);
         for ((key, value) in allGroupMap.entries) {
             methodBuidler.addStatement(
                 "\$N.put(\$S, \$T.class)",
@@ -371,11 +371,7 @@ class ARouterProcessor : AbstractProcessor() {
         }
 
         // return groupMap;
-
-        // return groupMap;
         methodBuidler.addStatement("return \$N", ProcessorConfig.GROUP_VAR1)
-
-        // 最终生成的类文件名 ARouter$$Group$$ + personal
 
         // 最终生成的类文件名 ARouter$$Group$$ + personal
         val finalClassName: String = ProcessorConfig.GROUP_FILE_NAME.toString() + options
@@ -384,8 +380,6 @@ class ARouterProcessor : AbstractProcessor() {
             Diagnostic.Kind.NOTE, "APT生成路由组Group类文件：" +
                     aptPackage + "." + finalClassName
         )
-
-        // 生成类文件：ARouter$$Group$$app
 
         // 生成类文件：ARouter$$Group$$app
         JavaFile.builder(

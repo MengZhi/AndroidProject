@@ -22,6 +22,7 @@ import com.example.mengzhi.reflectTesting.TestField
 import com.example.mengzhi.reflectTesting.TestMethod
 import com.example.myarouter_annotations.MyARouter
 import com.example.myarouter_annotations.MyParam
+import com.example.myarouterapi.ParameterManager
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
@@ -47,14 +48,18 @@ class AnimTestActivity : Activity() {
         TestMethod().testMethod()
         TestField().testField()
 
+//        ParameterManager.getInstance()?.loadParameter(this)
 //        Client.test()
     }
 
     private fun initTextView(intent: Intent) {
         val scoreTextView = findViewById<TextView>(R.id.result_text_view)
+        val versionTextView = findViewById<TextView>(R.id.hitouch_version)
+
         val score = intent.getParcelableExtra<Course>("course")
         if (score != null) {
             scoreTextView.text = "name: ${score?.name}, score:${score?.score}, Students:${score?.studentList}"
+            versionTextView.text = name
         }
     }
 

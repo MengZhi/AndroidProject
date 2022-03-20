@@ -17,10 +17,8 @@ import javax.tools.Diagnostic
 
 // 开启
 @SupportedAnnotationTypes(ProcessorConfig.PARAMETER_PACKAGE) // 我们服务的注解
-// 我们服务的注解
-// 我们服务的注解
-//@SupportedSourceVersion(SourceVersion.RELEASE_7) // 同学们：这个是必填的哦
-// 同学们：这个是必填的哦
+// 服务的注解
+//@SupportedSourceVersion(SourceVersion.RELEASE_7) 这个是必填的
 class ParameterProcessor : AbstractProcessor() {
     private lateinit var messager: Messager
     private lateinit var elementUtils: Elements
@@ -126,8 +124,6 @@ class ParameterProcessor : AbstractProcessor() {
                 Diagnostic.Kind.NOTE, "APT生成获取参数类文件：" +
                         className.packageName() + "." + finalClassName
             )
-
-            // 开始生成文件，例如：PersonalMainActivity$$Parameter
 
             // 开始生成文件，例如：PersonalMainActivity$$Parameter
             try {

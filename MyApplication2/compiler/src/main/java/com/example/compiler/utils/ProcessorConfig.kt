@@ -30,6 +30,9 @@ object ProcessorConfig {
     // ARouter api 的 ParameterGet 高层标准
     var AROUTER_AIP_PARAMETER_GET = "$AROUTER_API_PACKAGE.ParameterGet"
 
+    // ARouter api 的 ParameterGet 高层标准
+    var AROUTER_AIP_CALL = "$AROUTER_API_PACKAGE.Call"
+
     // 路由组，中的 Path 里面的 方法名
     var PATH_METHOD_NAME = "getPathMap"
 
