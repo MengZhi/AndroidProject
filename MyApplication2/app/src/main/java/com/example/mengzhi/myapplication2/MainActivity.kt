@@ -33,11 +33,40 @@ class MainActivity : Activity() {
         testParcelButton.setOnClickListener {
 //            getParcelBtnListener()
         }
+        setListenerForMVVMBtn()
+        setListenerForLifecycleBtn()
         super.onResume()
 
         InjectUtils.injectEvent(this)
 
 //        ParameterManager.getInstance()?.loadParameter(this)
+    }
+
+    private fun setListenerForMVVMBtn() {
+        val lifeCycleBtn = findViewById<Button>(R.id.mvvm_btn)
+        lifeCycleBtn.setOnClickListener {
+            RouterManager.getInstance()
+                ?.build("/app/MvvmTestingActivity")
+                ?.withString("name", "hello this is MainActivity")
+                ?.navigation(this)
+        }
+    }
+
+    private fun setListenerForLifecycleBtn() {
+        val lifeCycleBtn = findViewById<Button>(R.id.lifecycle_btn)
+        lifeCycleBtn.setOnClickListener {
+            RouterManager.getInstance()
+                ?.build("/app/LifecycleTestingActivity")
+                ?.withString("name", "hello this is LifecycleTestingActivity")
+                ?.navigation(this)
+        }
+    }
+
+    private fun setListenerForLifeCycleBtn() {
+        val lifeCycleBtn = findViewById<Button>(R.id.life_cycle_testing)
+        lifeCycleBtn.setOnClickListener {
+
+        }
     }
 
 //    @OnClick([R.id.anim_btn])
@@ -74,7 +103,6 @@ class MainActivity : Activity() {
                 ?.build("/app/AnimTestActivity")
                 ?.withString("name", "hello this is MainActivity")
                 ?.navigation(this)
-            finish()
         }
     }
 

@@ -21,9 +21,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="startService"/>
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+    <Button
+        android:id="@+id/life_cycle_testing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lifecycle Testing"/>
+    <Button
+        android:id="@+id/mvvm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MVVM Testing"/>
+    <Button
+        android:id="@+id/lifecycle_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lifecycle Testing"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/image_view"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"/>-->
 
 </LinearLayout>

@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mengzhi.mvvmTesting.viewModel.APIViewModel
 import com.example.mengzhi.myapplication2.R
 import com.example.mengzhi.myapplication2.databinding.ActivityMvvmTestingBinding
+import com.example.myarouter_annotations.MyARouter
 
+@MyARouter(path = "/app/MvvmTestingActivity")
 class MvvmTestingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
