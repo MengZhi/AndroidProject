@@ -2,8 +2,8 @@
 #include <string>
 
 // 解决循环Copy的问题 第二次就进不来了
-#ifndef _Included_com_example_mengzhi_myapplication2_JniTestingActivity // 如果没有定义这个宏
-#define _Included_com_example_mengzhi_myapplication2_JniTestingActivity // 我就定义这个宏
+#ifndef _Included_com_example_mengzhi_myapplication2_JniTestingActivity
+#define _Included_com_example_mengzhi_myapplication2_JniTestingActivity
 
 #ifdef __cplusplus // 如果是C++环境
 extern "C" { // 全部采用C的方式 不准你函数重载，函数名一样的问题

@@ -1,5 +1,6 @@
 package com.example.mengzhi.lifecycletesting.presenter
 
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -29,6 +30,7 @@ open class BasePresenter<T : IBaseView> : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     open fun onCreateX(owner: LifecycleOwner) {
+        Log.i(TAG, "onCreateX")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -41,6 +43,7 @@ open class BasePresenter<T : IBaseView> : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     open fun onResume(owner: LifecycleOwner) {
+        Log.i(TAG, "onResume ON_RESUME")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -53,5 +56,9 @@ open class BasePresenter<T : IBaseView> : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
     open fun onAny(owner: LifecycleOwner) {
+    }
+
+    companion object {
+        private const val TAG = "BasePresenter"
     }
 }

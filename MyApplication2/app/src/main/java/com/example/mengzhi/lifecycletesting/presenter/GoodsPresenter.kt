@@ -28,12 +28,12 @@ class GoodsPresenter<T : IGoodsView> : BasePresenter<T>() {
     }
 
     override fun onCreateX(owner: LifecycleOwner) {
-        super.onCreateX(owner)
         Log.i("jett", "create")
+        super.onCreateX(owner)
     }
 
     override fun onDestory(owner: LifecycleOwner) {
-        super.onDestory(owner)
         Log.i("jett", "destroy")
+        super.onDestory(owner)
     }
 }

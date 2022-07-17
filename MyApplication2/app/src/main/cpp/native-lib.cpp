@@ -64,42 +64,34 @@ Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeName(JNIEnv *en
     // 修改成 Beyond
     jstring jName = env->NewStringUTF("Beyond");
     env->SetObjectField(obj, j_fid, jName);
-
-   // printf()  C
-   // cout << << endl; // C++
 }
-
-//extern "C"
-//JNIEXPORT void JNICALL
-//Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeAge(JNIEnv *env, jobject jcls) {
-//
-//    const char* sig = "I";
-//
-//   jfieldID j_fid = env->GetStaticFieldID(jcls, "age", sig);
-//
-//   jint age = env->GetStaticIntField(jcls, j_fid);
-//
-//   age += 10;
-//
-//   env->SetStaticIntField(jcls, j_fid, age);
-//}
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_example_mengzhi_myapplication2_JniTestingActivity_callAddMethod(JNIEnv *env, jobject job) {
+Java_com_example_mengzhi_myapplication2_JniTestingActivity_callAddMethod(JNIEnv *env, jobject thiz) {
     // 自己得到 MainActivity.class
-    jclass  mainActivityClass = env->GetObjectClass(job);
+    jclass  mainActivityClass = env->GetObjectClass(thiz);
 
     // GetMethodID(MainActivity.class, 方法名, 方法的签名)
    jmethodID j_mid = env->GetMethodID(mainActivityClass, "add", "(II)I");
 
    // 调用 Java的方法
-   jint sum = env->CallIntMethod(job, j_mid, 3, 3);
+   jint sum = env->CallIntMethod(thiz, j_mid, 3, 3);
    LOGE("sum result:%d", sum);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeAge(JNIEnv *env, jobject thiz) {
-    // TODO: implement changeAge()
+Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeAge(JNIEnv *env, jclass mainActivityCls) {
+    jfieldID ageFid = env->GetStaticFieldID(mainActivityCls, "age", "I");
+    int age = env->GetStaticIntField(mainActivityCls, ageFid);
+    env->SetStaticIntField(mainActivityCls, ageFid, age+1);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_mengzhi_myapplication2_JniTestingActivity_changeNumber(JNIEnv *env, jobject thiz) {
+    jclass activityClass = env->GetObjectClass(thiz);
+    jfieldID numberFid = env->GetFieldID(activityClass, "number", "D");
+    double number = env->GetDoubleField(thiz, numberFid);
+    env->SetDoubleField(thiz, numberFid, number + 7);
 }
